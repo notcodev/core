@@ -1,0 +1,48 @@
+{
+  "name": "@necodev/prettier",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "prettier configs",
+  "private": false,
+  "license": "MIT",
+  "packageManager": "pnpm@10.9.0",
+  "engines": {
+    "node": ">=22.9.0"
+  },
+  "keywords": [
+    "prettier"
+  ],
+  "author": {
+    "name": "Erik Codev",
+    "url": "https://github.com/notcodev"
+  },
+  "homepage": "hhttps://github.com/notcodev/core",
+  "repository": {
+    "url": "https://github.com/notcodev/core"
+  },
+  "bugs": {
+    "url": "https://github.com/notcodev/core/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "format": "prettier --write \"*.js\""
+  },
+  "peerDependencies": {
+    "prettier": "^3.5.3"
+  },
+  "dependencies": {
+    "prettier": "^3.5.3"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx,cjs,mjs,cts,mts}": "prettier --write"
+  }
+}

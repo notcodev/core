@@ -1,0 +1,30 @@
+{
+  "name": "necodev-core",
+  "version": "1.0.0",
+  "author": {
+    "name": "Erik Codev",
+    "url": "https://github.com/notcodev"
+  },
+  "homepage": "hhttps://github.com/notcodev/core",
+  "repository": {
+    "url": "https://github.com/notcodev/core"
+  },
+  "bugs": {
+    "url": "https://github.com/notcodev/core/issues"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "commit": "commit"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "packageManager": "pnpm@10.9.0",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/prompt-cli": "^19.8.1",
+    "@commitlint/types": "^19.8.1"
+  }
+}
