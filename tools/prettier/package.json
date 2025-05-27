@@ -2,7 +2,7 @@
   "name": "@necodev/prettier",
   "type": "module",
   "version": "1.0.0",
-  "description": "prettier configs",
+  "description": "Prettier Configs",
   "private": false,
   "license": "MIT",
   "packageManager": "pnpm@10.9.0",
