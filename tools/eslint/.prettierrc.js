@@ -1,3 +1,3 @@
-import { prettier } from '@neo/prettier'
+import { prettier } from '@necodev/prettier'
 
 export default prettier

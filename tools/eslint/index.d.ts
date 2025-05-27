@@ -2,7 +2,7 @@ import type { OptionsConfig, TypedFlatConfigItem } from '@antfu/eslint-config'
 import type { ConfigNames } from '@antfu/eslint-config'
 import type { FlatConfigComposer } from 'eslint-flat-config-utils'
 
-declare module '@neo/eslint' {
+declare module '@necodev/eslint' {
   export type EslintOptions = OptionsConfig &
     TypedFlatConfigItem & {
       jsxA11y?: boolean
