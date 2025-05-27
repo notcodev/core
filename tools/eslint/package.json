@@ -1,7 +1,7 @@
 {
   "name": "@necodev/eslint",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "packageManager": "pnpm@10.9.0",
   "description": "ESLint Configs",
@@ -54,7 +54,7 @@
     "eslint-plugin-react-refresh": "0.4.19"
   },
   "devDependencies": {
-    "@neo/prettier": "workspace:*",
+    "@necodev/prettier": "workspace:*",
     "@types/eslint-plugin-jsx-a11y": "^6.10.0",
     "prettier": "^3.5.3"
   },
