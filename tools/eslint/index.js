@@ -1,10 +1,11 @@
 import antfu from '@antfu/eslint-config'
 import pluginNext from '@next/eslint-plugin-next'
-import eslintPluginJsxA11y from 'eslint-plugin-jsx-a11y'
+import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
+import pluginPrettier from 'eslint-plugin-prettier'
 import pluginReact from 'eslint-plugin-react'
 
 /** @type {import('@necodev/eslint').Eslint} */
-export function eslint({ jsxA11y, stylistic = false, next, ...options }) {
+export function eslint({ jsxA11y, stylistic = false, next, prettier, ...options }) {
   const configs = []
 
   if (next) {
@@ -20,8 +21,8 @@ export function eslint({ jsxA11y, stylistic = false, next, ...options }) {
   if (jsxA11y) {
     configs.unshift({
       name: 'necodev/jsx-a11y',
-      plugins: { 'jsx-a11y': eslintPluginJsxA11y },
-      rules: eslintPluginJsxA11y.flatConfigs.recommended.rules,
+      plugins: { 'jsx-a11y': pluginJsxA11y },
+      rules: pluginJsxA11y.flatConfigs.recommended.rules,
     })
   }
 
@@ -52,9 +53,19 @@ export function eslint({ jsxA11y, stylistic = false, next, ...options }) {
     })
   }
 
+  if (prettier) {
+    configs.unshift({
+      name: 'necodev/prettier',
+      plugins: { prettier: pluginPrettier },
+      rules: {
+        'prettier/prettier': 'warn',
+      },
+    })
+  }
+
   if (stylistic) {
     configs.unshift({
-      name: 'necodev/formatter',
+      name: 'necodev/stylistic',
       rules: {
         'style/arrow-parens': ['error', 'always'],
         'style/brace-style': 'off',
