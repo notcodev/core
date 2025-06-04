@@ -1,10 +1,21 @@
 import antfu from '@antfu/eslint-config'
+import pluginNext from '@next/eslint-plugin-next'
 import eslintPluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginReact from 'eslint-plugin-react'
 
 /** @type {import('@necodev/eslint').Eslint} */
-export function eslint({ jsxA11y, stylistic = false, ...options }) {
+export function eslint({ jsxA11y, stylistic = false, next, ...options }) {
   const configs = []
+
+  if (next) {
+    configs.unshift({
+      name: 'necodev/next',
+      plugins: {
+        '@next/next': pluginNext,
+      },
+      rules: pluginNext.configs.recommended.rules,
+    })
+  }
 
   if (jsxA11y) {
     configs.unshift({
@@ -25,12 +36,9 @@ export function eslint({ jsxA11y, stylistic = false, ...options }) {
         }, {}),
         'necodev-react/function-component-definition': [
           'error',
-          {
-            namedComponents: ['arrow-function'],
-            unnamedComponents: 'arrow-function',
-          },
+          { namedComponents: ['arrow-function', 'function-expression'] },
         ],
-        'necodev-react/prop-types': 'off',
+        'necodev-react/prop-types': options.typescript ? 'off' : 'warn',
         'necodev-react/react-in-jsx-scope': 'off',
       },
       settings: {
@@ -52,7 +60,6 @@ export function eslint({ jsxA11y, stylistic = false, ...options }) {
         'style/jsx-curly-newline': 'off',
         'style/jsx-one-expression-per-line': 'off',
         'style/jsx-quotes': ['error', 'prefer-single'],
-
         'style/linebreak-style': ['error', 'unix'],
         'style/max-len': [
           'error',
@@ -78,6 +85,13 @@ export function eslint({ jsxA11y, stylistic = false, ...options }) {
       'antfu/top-level-function': 'off',
       'no-console': 'warn',
       'test/prefer-lowercase-title': 'off',
+    },
+  })
+
+  configs.unshift({
+    name: 'necodev/imports/rules',
+    rules: {
+      'import/no-default-export': 'warn',
     },
   })
 

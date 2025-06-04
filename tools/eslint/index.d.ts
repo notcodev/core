@@ -6,6 +6,7 @@ declare module '@necodev/eslint' {
   export type EslintOptions = OptionsConfig &
     TypedFlatConfigItem & {
       jsxA11y?: boolean
+      next?: boolean
     }
 
   export type Eslint = (
