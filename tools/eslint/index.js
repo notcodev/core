@@ -36,7 +36,10 @@ export function eslint({ jsxA11y, stylistic = false, next, ...options }) {
         }, {}),
         'necodev-react/function-component-definition': [
           'error',
-          { namedComponents: ['arrow-function', 'function-expression'] },
+          {
+            namedComponents: next ? ['arrow-function', 'function-declaration'] : 'arrow-function',
+            unnamedComponents: 'arrow-function',
+          },
         ],
         'necodev-react/prop-types': options.typescript ? 'off' : 'warn',
         'necodev-react/react-in-jsx-scope': 'off',
@@ -91,7 +94,7 @@ export function eslint({ jsxA11y, stylistic = false, next, ...options }) {
   configs.unshift({
     name: 'necodev/imports/rules',
     rules: {
-      'import/no-default-export': 'warn',
+      'import/no-default-export': next ? 'off' : 'warn',
     },
   })
 
