@@ -2,13 +2,13 @@ import antfu from '@antfu/eslint-config'
 import eslintPluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginReact from 'eslint-plugin-react'
 
-/** @type {import('@neo/eslint').Eslint} */
+/** @type {import('@necodev/eslint').Eslint} */
 export function eslint({ jsxA11y, stylistic = false, ...options }) {
   const configs = []
 
   if (jsxA11y) {
     configs.unshift({
-      name: 'neo/jsx-a11y',
+      name: 'necodev/jsx-a11y',
       plugins: { 'jsx-a11y': eslintPluginJsxA11y },
       rules: eslintPluginJsxA11y.flatConfigs.recommended.rules,
     })
@@ -16,22 +16,22 @@ export function eslint({ jsxA11y, stylistic = false, ...options }) {
 
   if (options.react) {
     configs.unshift({
-      name: 'neo/react',
-      plugins: { 'neo-react': pluginReact },
+      name: 'necodev/react',
+      plugins: { 'necodev-react': pluginReact },
       rules: {
         ...Object.entries(pluginReact.configs.recommended.rules).reduce((acc, [key, value]) => {
-          acc[key.replace('react', 'neo-react')] = value
+          acc[key.replace('react', 'necodev-react')] = value
           return acc
         }, {}),
-        'neo-react/function-component-definition': [
+        'necodev-react/function-component-definition': [
           'error',
           {
             namedComponents: ['arrow-function'],
             unnamedComponents: 'arrow-function',
           },
         ],
-        'neo-react/prop-types': 'off',
-        'neo-react/react-in-jsx-scope': 'off',
+        'necodev-react/prop-types': 'off',
+        'necodev-react/react-in-jsx-scope': 'off',
       },
       settings: {
         react: {
@@ -43,7 +43,7 @@ export function eslint({ jsxA11y, stylistic = false, ...options }) {
 
   if (stylistic) {
     configs.unshift({
-      name: 'neo/formatter',
+      name: 'necodev/formatter',
       rules: {
         'style/arrow-parens': ['error', 'always'],
         'style/brace-style': 'off',
@@ -71,19 +71,18 @@ export function eslint({ jsxA11y, stylistic = false, ...options }) {
   }
 
   configs.unshift({
-    name: 'neo/rewrite',
+    name: 'necodev/rewrite',
     rules: {
       'antfu/curly': 'off',
       'antfu/if-newline': 'off',
       'antfu/top-level-function': 'off',
       'no-console': 'warn',
-      'react-hooks/exhaustive-deps': 'off',
       'test/prefer-lowercase-title': 'off',
     },
   })
 
   configs.unshift({
-    name: 'neolint/sort',
+    name: 'necodev/sort',
     rules: {
       'perfectionist/sort-array-includes': ['error', { order: 'asc', type: 'alphabetical' }],
       'perfectionist/sort-imports': [
