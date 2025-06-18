@@ -1,6 +1,7 @@
 {
   "name": "necodev-core",
   "version": "1.0.0",
+  "private": true,
   "author": {
     "name": "Erik Codev",
     "url": "https://github.com/notcodev"
