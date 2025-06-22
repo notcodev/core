@@ -1,5 +1,5 @@
 import { Options } from 'prettier'
 
-declare module '@necodev/prettier' {
+declare module '@notcodev/prettier' {
   export const prettier: Options
 }

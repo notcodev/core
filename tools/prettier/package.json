@@ -1,7 +1,7 @@
 {
-  "name": "@necodev/prettier",
+  "name": "@notcodev/prettier",
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Prettier Configs",
   "private": false,
   "license": "MIT",
