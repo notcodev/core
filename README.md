@@ -1,4 +1,4 @@
-# 🐈‍⬛ Necodev Core
+# 🐈‍⬛ Notcodev Core
 
 This repository is a collection of packages that I use in development
 
