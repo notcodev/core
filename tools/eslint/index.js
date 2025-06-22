@@ -1,62 +1,30 @@
 import antfu from '@antfu/eslint-config'
 import pluginNext from '@next/eslint-plugin-next'
+import pluginTanstackQuery from '@tanstack/eslint-plugin-query'
+import pluginTanstackRouter from '@tanstack/eslint-plugin-router'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginPrettier from 'eslint-plugin-prettier'
-import pluginReact from 'eslint-plugin-react'
 
-/** @type {import('@necodev/eslint').Eslint} */
-export function eslint({ jsxA11y, stylistic = false, next, prettier, ...options }) {
+/** @type {import('@notcodev/eslint').Eslint} */
+export function eslint({
+  jsxA11y,
+  stylistic = false,
+  next,
+  prettier = true,
+  tanstackRouter,
+  tanstackQuery,
+  ...options
+}) {
   const configs = []
 
-  if (next) {
-    configs.unshift({
-      name: 'necodev/next',
-      plugins: {
-        '@next/next': pluginNext,
-      },
-      rules: pluginNext.configs.recommended.rules,
-    })
-  }
-
-  if (jsxA11y) {
-    configs.unshift({
-      name: 'necodev/jsx-a11y',
-      plugins: { 'jsx-a11y': pluginJsxA11y },
-      rules: pluginJsxA11y.flatConfigs.recommended.rules,
-    })
-  }
-
-  if (options.react) {
-    configs.unshift({
-      name: 'necodev/react',
-      plugins: { 'necodev-react': pluginReact },
-      rules: {
-        ...Object.entries(pluginReact.configs.recommended.rules).reduce((acc, [key, value]) => {
-          acc[key.replace('react', 'necodev-react')] = value
-          return acc
-        }, {}),
-        'necodev-react/function-component-definition': [
-          'error',
-          {
-            namedComponents: next ? ['arrow-function', 'function-declaration'] : 'arrow-function',
-            unnamedComponents: 'arrow-function',
-          },
-        ],
-        'necodev-react/prop-types': options.typescript ? 'off' : 'warn',
-        'necodev-react/react-in-jsx-scope': 'off',
-      },
-      settings: {
-        react: {
-          version: 'detect',
-        },
-      },
-    })
-  }
-
   if (prettier) {
-    configs.unshift({
-      name: 'necodev/prettier',
+    configs.push({
+      name: 'notcodev/prettier/setup',
       plugins: { prettier: pluginPrettier },
+    })
+
+    configs.push({
+      name: 'notcodev/prettier/rules',
       rules: {
         'prettier/prettier': 'warn',
       },
@@ -64,8 +32,8 @@ export function eslint({ jsxA11y, stylistic = false, next, prettier, ...options 
   }
 
   if (stylistic) {
-    configs.unshift({
-      name: 'necodev/stylistic',
+    configs.push({
+      name: 'notcodev/stylistic',
       rules: {
         'style/arrow-parens': ['error', 'always'],
         'style/brace-style': 'off',
@@ -91,26 +59,22 @@ export function eslint({ jsxA11y, stylistic = false, next, prettier, ...options 
     })
   }
 
-  configs.unshift({
-    name: 'necodev/rewrite',
+  configs.push({
+    name: 'notcodev/unicorn/rules',
     rules: {
-      'antfu/curly': 'off',
-      'antfu/if-newline': 'off',
-      'antfu/top-level-function': 'off',
-      'no-console': 'warn',
-      'test/prefer-lowercase-title': 'off',
+      'unicorn/filename-case': ['error', { case: 'kebabCase', ignore: ['^.*\.(vue|md)$'] }],
     },
   })
 
-  configs.unshift({
-    name: 'necodev/imports/rules',
+  configs.push({
+    name: 'notcodev/imports/rules',
     rules: {
       'import/no-default-export': next ? 'off' : 'warn',
     },
   })
 
-  configs.unshift({
-    name: 'necodev/sort',
+  configs.push({
+    name: 'notcodev/perfectionist/rules',
     rules: {
       'perfectionist/sort-array-includes': ['error', { order: 'asc', type: 'alphabetical' }],
       'perfectionist/sort-imports': [
@@ -142,7 +106,7 @@ export function eslint({ jsxA11y, stylistic = false, next, prettier, ...options 
         'error',
         {
           customGroups: { callback: 'on*', reserved: ['key', 'ref'] },
-          groups: ['shorthand', 'reserved', 'multiline', 'unknown', 'callback'],
+          groups: ['reserved', 'multiline', 'unknown', 'callback', 'shorthand'],
           order: 'asc',
           type: 'alphabetical',
         },
@@ -172,5 +136,65 @@ export function eslint({ jsxA11y, stylistic = false, next, prettier, ...options 
     },
   })
 
-  return antfu({ ...options, stylistic }, configs)
+  if (options.react) {
+    configs.push({
+      name: 'notcodev/react/rules',
+      rules: {
+        'react/jsx-no-undef': 'error',
+        'react/prefer-destructuring-assignment': 'warn',
+        'react/no-useless-fragment': 'warn',
+        'react/prefer-shorthand-boolean': 'warn',
+      },
+    })
+  }
+
+  if (next) {
+    configs.push({
+      name: 'notcodev/next/setup',
+      plugins: { '@next/next': pluginNext },
+    })
+
+    configs.push({
+      name: 'notcodev/next/rules',
+      rules: pluginNext.configs.recommended.rules,
+    })
+  }
+
+  if (jsxA11y) {
+    configs.push({
+      name: 'notcodev/jsx-a11y/setup',
+      plugins: { 'jsx-a11y': pluginJsxA11y },
+    })
+
+    configs.push({
+      name: 'notcodev/jsx-a11y/rules',
+      rules: pluginJsxA11y.configs.recommended.rules,
+    })
+  }
+
+  if (tanstackQuery) {
+    configs.push({
+      name: 'notcodev/tanstack-query/setup',
+      plugins: { '@tanstack/query': pluginTanstackQuery },
+    })
+
+    configs.push({
+      name: 'notcodev/tanstack-query/rules',
+      rules: pluginTanstackQuery.configs.recommended.rules,
+    })
+  }
+
+  if (tanstackRouter) {
+    configs.push({
+      name: 'notcodev/tanstack-router/setup',
+      plugins: { '@tanstack/router': pluginTanstackRouter },
+    })
+
+    configs.push({
+      name: 'notcodev/tanstack-router/rules',
+      rules: pluginTanstackRouter.configs.recommended.rules,
+    })
+  }
+
+  return antfu({ ...options, stylistic, lessOpinionated: true }, configs)
 }
