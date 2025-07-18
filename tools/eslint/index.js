@@ -14,7 +14,7 @@ export function eslint({
   tanstackRouter,
   tanstackQuery,
   ...options
-}) {
+} = {}) {
   const configs = []
 
   if (prettier) {
