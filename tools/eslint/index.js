@@ -175,7 +175,7 @@ export function eslint({
         'react/prefer-destructuring-assignment': 'warn',
         'react/no-useless-fragment': 'warn',
         'react/prefer-shorthand-boolean': 'warn',
-        'react-hooks/no-direct-set-state-in-use-effect': next
+        'react-hooks-extra/no-direct-set-state-in-use-effect': next
           ? 'off'
           : 'warn',
       },
