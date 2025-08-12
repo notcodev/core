@@ -15,6 +15,9 @@ export function eslint({
   tanstackQuery,
   ...options
 } = {}) {
+  /**
+   * @type {import('@antfu/eslint-config').TypedFlatConfigItem[]}
+   */
   const configs = []
 
   if (prettier) {
@@ -45,16 +48,24 @@ export function eslint({
         'style/linebreak-style': ['error', 'unix'],
         'style/max-len': [
           'error',
-          100,
+          70,
           2,
-          { ignoreComments: true, ignoreStrings: true, ignoreTemplateLiterals: true },
+          {
+            ignoreComments: true,
+            ignoreStrings: true,
+            ignoreTemplateLiterals: true,
+          },
         ],
         'style/member-delimiter-style': 'off',
         'style/multiline-ternary': 'off',
         'style/no-tabs': 'error',
         'style/operator-linebreak': 'off',
         'style/quote-props': 'off',
-        'style/quotes': ['error', 'single', { allowTemplateLiterals: true }],
+        'style/quotes': [
+          'error',
+          'single',
+          { allowTemplateLiterals: true },
+        ],
       },
     })
   }
@@ -62,12 +73,19 @@ export function eslint({
   configs.push({
     name: 'notcodev/unicorn/rules',
     rules: {
-      'unicorn/filename-case': ['error', { case: 'kebabCase', ignore: ['^.*\.(vue|md)$'] }],
+      'unicorn/filename-case': [
+        'error',
+        { case: 'kebabCase', ignore: ['^.*\.(vue|md)$'] },
+      ],
     },
   })
 
   configs.push({
     name: 'notcodev/imports/rules',
+    files: [
+      // Ignore config files because usually config files has default export
+      '!**/@(*.config.{ts,cts,mts,js,cjs,mjs}|.prettierrc.{js,cjs,mjs})',
+    ],
     rules: {
       'import/no-default-export': next ? 'off' : 'warn',
     },
@@ -76,7 +94,10 @@ export function eslint({
   configs.push({
     name: 'notcodev/perfectionist/rules',
     rules: {
-      'perfectionist/sort-array-includes': ['error', { order: 'asc', type: 'alphabetical' }],
+      'perfectionist/sort-array-includes': [
+        'error',
+        { order: 'asc', type: 'alphabetical' },
+      ],
       'perfectionist/sort-imports': [
         'error',
         {
@@ -100,13 +121,23 @@ export function eslint({
       ],
       'perfectionist/sort-interfaces': [
         'error',
-        { groups: ['unknown', 'method', 'multiline'], order: 'asc', type: 'alphabetical' },
+        {
+          groups: ['unknown', 'method', 'multiline'],
+          order: 'asc',
+          type: 'alphabetical',
+        },
       ],
       'perfectionist/sort-jsx-props': [
         'error',
         {
           customGroups: { callback: 'on*', reserved: ['key', 'ref'] },
-          groups: ['reserved', 'multiline', 'unknown', 'callback', 'shorthand'],
+          groups: [
+            'reserved',
+            'multiline',
+            'unknown',
+            'callback',
+            'shorthand',
+          ],
           order: 'asc',
           type: 'alphabetical',
         },
@@ -144,6 +175,9 @@ export function eslint({
         'react/prefer-destructuring-assignment': 'warn',
         'react/no-useless-fragment': 'warn',
         'react/prefer-shorthand-boolean': 'warn',
+        'react-hooks/no-direct-set-state-in-use-effect': next
+          ? 'off'
+          : 'warn',
       },
     })
   }
@@ -196,5 +230,8 @@ export function eslint({
     })
   }
 
-  return antfu({ ...options, stylistic, lessOpinionated: true }, configs)
+  return antfu(
+    { ...options, stylistic, lessOpinionated: true },
+    configs,
+  )
 }
