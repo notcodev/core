@@ -1,7 +1,7 @@
 {
   "name": "@notcodev/eslint",
   "type": "module",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "private": false,
   "packageManager": "pnpm@10.9.0",
   "description": "ESLint Configs",

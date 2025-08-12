@@ -82,9 +82,9 @@ export function eslint({
 
   configs.push({
     name: 'notcodev/imports/rules',
-    files: [
+    ignores: [
       // Ignore config files because usually config files has default export
-      '!**/@(*.config.{ts,cts,mts,js,cjs,mjs}|.prettierrc.{js,cjs,mjs})',
+      '**/@(*.config.{ts,cts,mts,js,cjs,mjs}|.prettierrc.{js,cjs,mjs})',
     ],
     rules: {
       'import/no-default-export': next ? 'off' : 'warn',
