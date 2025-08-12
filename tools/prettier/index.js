@@ -1,6 +1,6 @@
 /** @type {import('prettier').Options} */
 export const prettier = {
-  printWidth: 100,
+  printWidth: 70,
   singleQuote: true,
   jsxSingleQuote: true,
   semi: false,
