@@ -1,10 +1,16 @@
-import type { OptionsConfig, TypedFlatConfigItem } from '@antfu/eslint-config'
+import type {
+  OptionsConfig,
+  TypedFlatConfigItem,
+} from '@antfu/eslint-config'
 import type { ConfigNames } from '@antfu/eslint-config'
 import type { OptionsOverrides } from '@antfu/eslint-config'
 import type { FlatConfigComposer } from 'eslint-flat-config-utils'
 
 declare module '@notcodev/eslint' {
-  export type EslintOptions = Omit<OptionsConfig, 'lessOpinionated' | 'react' | 'stylistic'> &
+  export type EslintOptions = Omit<
+    OptionsConfig,
+    'lessOpinionated' | 'react' | 'stylistic'
+  > &
     TypedFlatConfigItem & {
       /**
        * Enable react rules.
@@ -59,6 +65,14 @@ declare module '@notcodev/eslint' {
        * @default false
        */
       tanstackRouter?: boolean
+
+      /**
+       * Enable rules for Effector.
+       *
+       * @see https://eslint.effector.dev
+       * @default false
+       */
+      effector?: boolean
     }
 
   export type Eslint = (

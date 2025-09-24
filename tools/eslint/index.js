@@ -2,6 +2,7 @@ import antfu from '@antfu/eslint-config'
 import pluginNext from '@next/eslint-plugin-next'
 import pluginTanstackQuery from '@tanstack/eslint-plugin-query'
 import pluginTanstackRouter from '@tanstack/eslint-plugin-router'
+import pluginEffector from 'eslint-plugin-effector'
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginPrettier from 'eslint-plugin-prettier'
 
@@ -13,6 +14,7 @@ export function eslint({
   prettier = true,
   tanstackRouter,
   tanstackQuery,
+  effector,
   ...options
 } = {}) {
   /**
@@ -227,6 +229,24 @@ export function eslint({
     configs.push({
       name: 'notcodev/tanstack-router/rules',
       rules: pluginTanstackRouter.configs.recommended.rules,
+    })
+  }
+
+  if (effector) {
+    configs.push({
+      name: 'notcodev/effector/setup',
+      plugins: { effector: pluginEffector },
+    })
+
+    configs.push({
+      name: 'notcodev/effector/rules',
+      rules: {
+        ...pluginEffector.configs.recommended.rules,
+        ...pluginEffector.configs.patronum.rules,
+        ...pluginEffector.configs.future.rules,
+        ...pluginEffector.configs.scope.rules,
+        ...(options.react ? pluginEffector.configs.react.rules : {}),
+      },
     })
   }
 
