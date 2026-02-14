@@ -1,26 +1,69 @@
+import type {
+  OptionsConfig,
+  TypedFlatConfigItem,
+} from '@antfu/eslint-config'
+
 import antfu from '@antfu/eslint-config'
-import pluginNext from '@next/eslint-plugin-next'
 import pluginTanstackQuery from '@tanstack/eslint-plugin-query'
 import pluginTanstackRouter from '@tanstack/eslint-plugin-router'
 import pluginEffector from 'eslint-plugin-effector'
-import pluginJsxA11y from 'eslint-plugin-jsx-a11y'
 import pluginPrettier from 'eslint-plugin-prettier'
 
-/** @type {import('@notcodev/eslint').Eslint} */
+export type EslintOptions = Omit<
+  OptionsConfig,
+  'lessOpinionated' | 'stylistic'
+> &
+  TypedFlatConfigItem & {
+    /**
+     * Enable stylistic rules.
+     *
+     * @see https://eslint.style/
+     * @default false
+     */
+    stylistic?: boolean
+
+    /**
+     * Enable prettier rules.
+     *
+     * @default true
+     */
+    prettier?: boolean
+
+    /**
+     * Enable rules for TanStack Query.
+     *
+     * @see https://tanstack.com/query/latest/docs/eslint/eslint-plugin-query
+     * @default false
+     */
+    tanstackQuery?: boolean
+
+    /**
+     * Enable rules for TanStack Router.
+     *
+     * @see https://tanstack.com/router/latest/docs/eslint/eslint-plugin-router
+     * @default false
+     */
+    tanstackRouter?: boolean
+
+    /**
+     * Enable rules for Effector.
+     *
+     * @see https://eslint.effector.dev
+     * @default false
+     */
+    effector?: boolean
+  }
+
 export function eslint({
-  jsxA11y,
   stylistic = false,
-  next,
+  nextjs,
   prettier = true,
   tanstackRouter,
   tanstackQuery,
   effector,
   ...options
-} = {}) {
-  /**
-   * @type {import('@antfu/eslint-config').TypedFlatConfigItem[]}
-   */
-  const configs = []
+}: EslintOptions = {}) {
+  const configs: TypedFlatConfigItem[] = []
 
   if (prettier) {
     configs.push({
@@ -89,7 +132,7 @@ export function eslint({
       '**/@(*.config.{ts,cts,mts,js,cjs,mjs}|.prettierrc.{js,cjs,mjs})',
     ],
     rules: {
-      'import/no-default-export': next ? 'off' : 'warn',
+      'import/no-default-export': nextjs ? 'off' : 'warn',
     },
   })
 
@@ -98,25 +141,27 @@ export function eslint({
     rules: {
       'perfectionist/sort-array-includes': [
         'error',
-        { order: 'asc', type: 'alphabetical' },
+        {
+          order: 'asc',
+          type: 'alphabetical',
+        },
       ],
       'perfectionist/sort-imports': [
         'error',
         {
           groups: [
-            'type',
-            ['builtin', 'external'],
-            'internal-type',
-            ['internal'],
-            ['parent-type', 'sibling-type', 'index-type'],
-            ['parent', 'sibling', 'index'],
-            'object',
-            'style',
+            'type-import',
+            ['value-builtin', 'value-external'],
+            'type-internal',
+            'value-internal',
+            ['type-parent', 'type-sibling', 'type-index'],
+            ['value-parent', 'value-sibling', 'value-index'],
+            'side-effect',
             'side-effect-style',
             'unknown',
           ],
           internalPattern: ['^~/.*', '^@/.*'],
-          newlinesBetween: 'always',
+          newlinesBetween: 1,
           order: 'asc',
           type: 'natural',
         },
@@ -124,7 +169,7 @@ export function eslint({
       'perfectionist/sort-interfaces': [
         'error',
         {
-          groups: ['unknown', 'method', 'multiline'],
+          groups: ['property', 'member', 'method', 'index-signature'],
           order: 'asc',
           type: 'alphabetical',
         },
@@ -132,13 +177,22 @@ export function eslint({
       'perfectionist/sort-jsx-props': [
         'error',
         {
-          customGroups: { callback: 'on*', reserved: ['key', 'ref'] },
+          customGroups: [
+            {
+              groupName: 'reserved',
+              elementNamePattern: '^(key|ref)$',
+            },
+            {
+              groupName: 'callback',
+              elementNamePattern: '^on[A-Z].*',
+            },
+          ],
           groups: [
             'reserved',
-            'multiline',
             'unknown',
             'callback',
-            'shorthand',
+            'shorthand-prop',
+            'multiline-prop',
           ],
           order: 'asc',
           type: 'alphabetical',
@@ -177,34 +231,10 @@ export function eslint({
         'react/prefer-destructuring-assignment': 'warn',
         'react/no-useless-fragment': 'warn',
         'react/prefer-shorthand-boolean': 'warn',
-        'react-hooks-extra/no-direct-set-state-in-use-effect': next
+        'react-hooks-extra/no-direct-set-state-in-use-effect': nextjs
           ? 'off'
           : 'warn',
       },
-    })
-  }
-
-  if (next) {
-    configs.push({
-      name: 'notcodev/next/setup',
-      plugins: { '@next/next': pluginNext },
-    })
-
-    configs.push({
-      name: 'notcodev/next/rules',
-      rules: pluginNext.configs.recommended.rules,
-    })
-  }
-
-  if (jsxA11y) {
-    configs.push({
-      name: 'notcodev/jsx-a11y/setup',
-      plugins: { 'jsx-a11y': pluginJsxA11y },
-    })
-
-    configs.push({
-      name: 'notcodev/jsx-a11y/rules',
-      rules: pluginJsxA11y.configs.recommended.rules,
     })
   }
 
@@ -241,17 +271,19 @@ export function eslint({
     configs.push({
       name: 'notcodev/effector/rules',
       rules: {
-        ...pluginEffector.configs.recommended.rules,
-        ...pluginEffector.configs.patronum.rules,
-        ...pluginEffector.configs.future.rules,
-        ...pluginEffector.configs.scope.rules,
-        ...(options.react ? pluginEffector.configs.react.rules : {}),
+        ...pluginEffector.flatConfigs.recommended.rules,
+        ...pluginEffector.flatConfigs.patronum.rules,
+        ...pluginEffector.flatConfigs.future.rules,
+        ...pluginEffector.flatConfigs.scope.rules,
+        ...(options.react
+          ? pluginEffector.flatConfigs.react.rules
+          : {}),
       },
     })
   }
 
   return antfu(
-    { ...options, stylistic, lessOpinionated: true },
+    { ...options, stylistic, nextjs, lessOpinionated: true },
     configs,
   )
 }

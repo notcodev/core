@@ -1,4 +1,4 @@
-import { eslint } from './index.js'
+import { eslint } from '@notcodev/eslint'
 
 export default eslint({
   typescript: true,

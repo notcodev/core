@@ -1,3 +1,3 @@
 # 🐈‍⬛ ESLint Configs
 
-This package contains ESLint confuguration
+This package contains ESLint configuration
