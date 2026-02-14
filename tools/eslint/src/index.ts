@@ -230,7 +230,7 @@ export function eslint({
         'react/jsx-no-undef': 'error',
         'react/prefer-destructuring-assignment': 'warn',
         'react/no-useless-fragment': 'warn',
-        'react/prefer-shorthand-boolean': 'warn',
+        'react/jsx-shorthand-boolean': 'warn',
         'react-hooks-extra/no-direct-set-state-in-use-effect': nextjs
           ? 'off'
           : 'warn',
